@@ -1,0 +1,633 @@
+---
+title: "Essential Third-Party API Integrations for Modern Web Applications"
+summary: "A comprehensive guide to integrating popular third-party APIs including Stripe, DocuSign, Twilio, and more in your web applications."
+image: "/images/posts/api-integrations.webp"
+author: "Keyur Sanghani"
+publishedAt: "2024-08-20"
+---
+
+# Essential Third-Party API Integrations for Modern Web Applications
+
+In my role as a Backend Developer at Vivansh Infotech, I've had extensive experience integrating various third-party APIs into web applications. These integrations are crucial for building feature-rich applications without reinventing the wheel. Today, I'll share insights from my hands-on experience with popular APIs.
+
+## Why Third-Party Integrations Matter
+
+Third-party integrations allow developers to:
+- **Focus on Core Business Logic**: Leverage specialized services for non-core features
+- **Reduce Development Time**: Implement complex functionality quickly
+- **Improve Reliability**: Use battle-tested services with high uptime
+- **Access Advanced Features**: Utilize cutting-edge technology without building from scratch
+
+## Payment Processing with Stripe
+
+Stripe is one of the most developer-friendly payment processors I've worked with.
+
+### Basic Setup
+
+```php
+// Install Stripe PHP SDK
+composer require stripe/stripe-php
+
+// Basic configuration
+\Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+```
+
+### Creating Payment Intents
+
+```php
+class StripePaymentService
+{
+    public function createPaymentIntent($amount, $currency = 'usd', $metadata = [])
+    {
+        try {
+            $paymentIntent = \Stripe\PaymentIntent::create([
+                'amount' => $amount * 100, // Stripe uses cents
+                'currency' => $currency,
+                'metadata' => $metadata,
+                'automatic_payment_methods' => [
+                    'enabled' => true,
+                ],
+            ]);
+            
+            return [
+                'success' => true,
+                'client_secret' => $paymentIntent->client_secret,
+                'payment_intent_id' => $paymentIntent->id,
+            ];
+        } catch (\Stripe\Exception\CardException $e) {
+            return [
+                'success' => false,
+                'error' => $e->getError()->message,
+            ];
+        }
+    }
+}
+```
+
+### Handling Webhooks
+
+```php
+// Stripe webhook endpoint
+Route::post('/stripe/webhook', function (Request $request) {
+    $payload = $request->getContent();
+    $sig_header = $request->header('Stripe-Signature');
+    $endpoint_secret = config('services.stripe.webhook_secret');
+    
+    try {
+        $event = \Stripe\Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
+        
+        switch ($event->type) {
+            case 'payment_intent.succeeded':
+                $paymentIntent = $event->data->object;
+                // Handle successful payment
+                PaymentService::handleSuccessfulPayment($paymentIntent);
+                break;
+                
+            case 'payment_intent.payment_failed':
+                $paymentIntent = $event->data->object;
+                // Handle failed payment
+                PaymentService::handleFailedPayment($paymentIntent);
+                break;
+        }
+        
+        return response('', 200);
+    } catch (\Exception $e) {
+        return response('Webhook Error: ' . $e->getMessage(), 400);
+    }
+});
+```
+
+## Document Management with DocuSign
+
+DocuSign integration is essential for applications requiring digital signatures and document workflows.
+
+### Basic Setup
+
+```php
+// Install DocuSign PHP SDK
+composer require docusign/esign-client
+
+class DocuSignService
+{
+    private $apiClient;
+    private $accountId;
+    
+    public function __construct()
+    {
+        $this->apiClient = new \DocuSign\eSign\Client\ApiClient();
+        $this->apiClient->getConfig()->setHost(config('services.docusign.base_url'));
+        $this->accountId = config('services.docusign.account_id');
+    }
+    
+    public function authenticate()
+    {
+        $privateKey = file_get_contents(config('services.docusign.private_key_path'));
+        
+        $response = $this->apiClient->requestJWTUserToken(
+            config('services.docusign.integration_key'),
+            config('services.docusign.user_id'),
+            $privateKey,
+            3600
+        );
+        
+        $this->apiClient->getConfig()->setAccessToken($response[0]['access_token']);
+    }
+}
+```
+
+### Creating and Sending Envelopes
+
+```php
+public function createEnvelope($documentPath, $signerEmail, $signerName)
+{
+    $this->authenticate();
+    
+    // Create document
+    $document = new \DocuSign\eSign\Model\Document([
+        'document_base64' => base64_encode(file_get_contents($documentPath)),
+        'name' => 'Contract.pdf',
+        'file_extension' => 'pdf',
+        'document_id' => '1'
+    ]);
+    
+    // Create signer
+    $signer = new \DocuSign\eSign\Model\Signer([
+        'email' => $signerEmail,
+        'name' => $signerName,
+        'recipient_id' => '1',
+        'routing_order' => '1'
+    ]);
+    
+    // Create signature tab
+    $signHere = new \DocuSign\eSign\Model\SignHere([
+        'document_id' => '1',
+        'page_number' => '1',
+        'x_position' => '100',
+        'y_position' => '100'
+    ]);
+    
+    $signer->setTabs(new \DocuSign\eSign\Model\Tabs(['sign_here_tabs' => [$signHere]]));
+    
+    // Create envelope
+    $envelope = new \DocuSign\eSign\Model\EnvelopeDefinition([
+        'email_subject' => 'Please sign the contract',
+        'documents' => [$document],
+        'recipients' => new \DocuSign\eSign\Model\Recipients(['signers' => [$signer]]),
+        'status' => 'sent'
+    ]);
+    
+    $envelopesApi = new \DocuSign\eSign\Api\EnvelopesApi($this->apiClient);
+    $result = $envelopesApi->createEnvelope($this->accountId, $envelope);
+    
+    return $result->getEnvelopeId();
+}
+```
+
+## Communication with Twilio
+
+Twilio provides robust communication APIs for SMS, voice, and video.
+
+### SMS Integration
+
+```php
+// Install Twilio SDK
+composer require twilio/sdk
+
+class TwilioService
+{
+    private $client;
+    
+    public function __construct()
+    {
+        $this->client = new \Twilio\Rest\Client(
+            config('services.twilio.sid'),
+            config('services.twilio.token')
+        );
+    }
+    
+    public function sendSMS($to, $message)
+    {
+        try {
+            $message = $this->client->messages->create($to, [
+                'from' => config('services.twilio.phone'),
+                'body' => $message
+            ]);
+            
+            return [
+                'success' => true,
+                'message_sid' => $message->sid
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+    
+    public function sendWhatsApp($to, $message)
+    {
+        try {
+            $message = $this->client->messages->create(
+                'whatsapp:' . $to,
+                [
+                    'from' => 'whatsapp:' . config('services.twilio.whatsapp'),
+                    'body' => $message
+                ]
+            );
+            
+            return [
+                'success' => true,
+                'message_sid' => $message->sid
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+}
+```
+
+## Video Integration with Zoom SDK
+
+For applications requiring video conferencing capabilities:
+
+```php
+class ZoomService
+{
+    private $apiKey;
+    private $apiSecret;
+    private $baseUrl = 'https://api.zoom.us/v2/';
+    
+    public function __construct()
+    {
+        $this->apiKey = config('services.zoom.api_key');
+        $this->apiSecret = config('services.zoom.api_secret');
+    }
+    
+    private function generateJWT()
+    {
+        $payload = [
+            'iss' => $this->apiKey,
+            'exp' => time() + 3600,
+            'iat' => time(),
+            'aud' => 'zoom'
+        ];
+        
+        return JWT::encode($payload, $this->apiSecret, 'HS256');
+    }
+    
+    public function createMeeting($topic, $startTime, $duration = 60)
+    {
+        $jwt = $this->generateJWT();
+        
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $jwt,
+            'Content-Type' => 'application/json'
+        ])->post($this->baseUrl . 'users/me/meetings', [
+            'topic' => $topic,
+            'type' => 2, // Scheduled meeting
+            'start_time' => $startTime,
+            'duration' => $duration,
+            'timezone' => 'UTC',
+            'settings' => [
+                'host_video' => true,
+                'participant_video' => true,
+                'join_before_host' => false,
+                'mute_upon_entry' => true
+            ]
+        ]);
+        
+        return $response->json();
+    }
+}
+```
+
+## Advertising APIs Integration
+
+### Google Ads API
+
+```php
+class GoogleAdsService
+{
+    private $client;
+    
+    public function __construct()
+    {
+        $this->client = new Google\Ads\GoogleAds\Lib\V14\GoogleAdsClient([
+            'developer_token' => config('services.google_ads.developer_token'),
+            'login_customer_id' => config('services.google_ads.login_customer_id'),
+            'oauth2' => [
+                'client_id' => config('services.google_ads.client_id'),
+                'client_secret' => config('services.google_ads.client_secret'),
+                'refresh_token' => config('services.google_ads.refresh_token')
+            ]
+        ]);
+    }
+    
+    public function getCampaigns($customerId)
+    {
+        $query = 'SELECT campaign.id, campaign.name, campaign.status FROM campaign';
+        
+        $response = $this->client->getGoogleAdsServiceClient()
+            ->search($customerId, $query);
+        
+        $campaigns = [];
+        foreach ($response->iterateAllElements() as $row) {
+            $campaigns[] = [
+                'id' => $row->getCampaign()->getId(),
+                'name' => $row->getCampaign()->getName(),
+                'status' => $row->getCampaign()->getStatus()
+            ];
+        }
+        
+        return $campaigns;
+    }
+}
+```
+
+### Facebook Ads API
+
+```php
+class FacebookAdsService
+{
+    private $api;
+    
+    public function __construct()
+    {
+        $this->api = Api::init(
+            config('services.facebook.app_id'),
+            config('services.facebook.app_secret'),
+            config('services.facebook.access_token')
+        );
+    }
+    
+    public function getAdAccounts()
+    {
+        $user = new User('me');
+        $accounts = $user->getAdAccounts();
+        
+        $result = [];
+        foreach ($accounts as $account) {
+            $result[] = [
+                'id' => $account->id,
+                'name' => $account->name,
+                'currency' => $account->currency,
+                'timezone_name' => $account->timezone_name
+            ];
+        }
+        
+        return $result;
+    }
+}
+```
+
+## Accounting Integration with QuickBooks
+
+```php
+class QuickBooksService
+{
+    private $dataService;
+    
+    public function __construct($accessToken, $refreshToken, $companyId)
+    {
+        $this->dataService = DataService::Configure([
+            'auth_mode' => 'oauth2',
+            'ClientID' => config('services.quickbooks.client_id'),
+            'ClientSecret' => config('services.quickbooks.client_secret'),
+            'accessTokenKey' => $accessToken,
+            'refreshTokenKey' => $refreshToken,
+            'QBORealmID' => $companyId,
+            'baseUrl' => 'https://sandbox-quickbooks.api.intuit.com'
+        ]);
+    }
+    
+    public function createCustomer($customerData)
+    {
+        $customer = Customer::create([
+            'Name' => $customerData['name'],
+            'CompanyName' => $customerData['company'],
+            'BillAddr' => [
+                'Line1' => $customerData['address'],
+                'City' => $customerData['city'],
+                'Country' => $customerData['country']
+            ]
+        ]);
+        
+        $result = $this->dataService->Add($customer);
+        return $result;
+    }
+}
+```
+
+## Best Practices for API Integrations
+
+### 1. Error Handling and Retry Logic
+
+```php
+class ApiService
+{
+    protected function makeRequest($method, $url, $data = [], $maxRetries = 3)
+    {
+        $attempt = 0;
+        
+        while ($attempt < $maxRetries) {
+            try {
+                $response = Http::timeout(30)->$method($url, $data);
+                
+                if ($response->successful()) {
+                    return $response->json();
+                }
+                
+                if ($response->status() >= 400 && $response->status() < 500) {
+                    // Client error, don't retry
+                    throw new \Exception('Client error: ' . $response->body());
+                }
+                
+                // Server error, retry
+                $attempt++;
+                sleep(pow(2, $attempt)); // Exponential backoff
+                
+            } catch (\Exception $e) {
+                if ($attempt === $maxRetries - 1) {
+                    throw $e;
+                }
+                $attempt++;
+                sleep(pow(2, $attempt));
+            }
+        }
+    }
+}
+```
+
+### 2. Rate Limiting
+
+```php
+class RateLimitedApiService
+{
+    private $rateLimiter;
+    
+    public function __construct()
+    {
+        $this->rateLimiter = RateLimiter::for('api', function ($request) {
+            return Limit::perMinute(60);
+        });
+    }
+    
+    protected function makeRateLimitedRequest($key, $callback)
+    {
+        return $this->rateLimiter->attempt(
+            $key,
+            1,
+            $callback,
+            60 // seconds to wait if rate limit exceeded
+        );
+    }
+}
+```
+
+### 3. Configuration Management
+
+```php
+// config/services.php
+return [
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    ],
+    
+    'docusign' => [
+        'integration_key' => env('DOCUSIGN_INTEGRATION_KEY'),
+        'user_id' => env('DOCUSIGN_USER_ID'),
+        'account_id' => env('DOCUSIGN_ACCOUNT_ID'),
+        'private_key_path' => env('DOCUSIGN_PRIVATE_KEY_PATH'),
+        'base_url' => env('DOCUSIGN_BASE_URL'),
+    ],
+    
+    'twilio' => [
+        'sid' => env('TWILIO_SID'),
+        'token' => env('TWILIO_TOKEN'),
+        'phone' => env('TWILIO_PHONE'),
+        'whatsapp' => env('TWILIO_WHATSAPP'),
+    ],
+];
+```
+
+### 4. Webhook Security
+
+```php
+class WebhookSecurityMiddleware
+{
+    public function handle($request, Closure $next, $service)
+    {
+        switch ($service) {
+            case 'stripe':
+                return $this->verifyStripeWebhook($request, $next);
+            case 'docusign':
+                return $this->verifyDocuSignWebhook($request, $next);
+            default:
+                abort(400, 'Unknown webhook service');
+        }
+    }
+    
+    private function verifyStripeWebhook($request, $next)
+    {
+        $payload = $request->getContent();
+        $signature = $request->header('Stripe-Signature');
+        $secret = config('services.stripe.webhook_secret');
+        
+        try {
+            \Stripe\Webhook::constructEvent($payload, $signature, $secret);
+            return $next($request);
+        } catch (\Exception $e) {
+            abort(400, 'Invalid webhook signature');
+        }
+    }
+}
+```
+
+## Testing API Integrations
+
+```php
+class ApiIntegrationTest extends TestCase
+{
+    use MocksStripe, MocksDocuSign;
+    
+    public function test_stripe_payment_creation()
+    {
+        $this->mockStripePaymentIntent([
+            'id' => 'pi_test_123',
+            'client_secret' => 'pi_test_123_secret',
+            'status' => 'requires_payment_method'
+        ]);
+        
+        $service = new StripePaymentService();
+        $result = $service->createPaymentIntent(100, 'usd');
+        
+        $this->assertTrue($result['success']);
+        $this->assertEquals('pi_test_123_secret', $result['client_secret']);
+    }
+    
+    public function test_docusign_envelope_creation()
+    {
+        $this->mockDocuSignEnvelope(['envelope_id' => 'env_test_123']);
+        
+        $service = new DocuSignService();
+        $envelopeId = $service->createEnvelope(
+            storage_path('test/contract.pdf'),
+            'test@example.com',
+            'John Doe'
+        );
+        
+        $this->assertEquals('env_test_123', $envelopeId);
+    }
+}
+```
+
+## Monitoring and Logging
+
+```php
+class ApiMonitoringService
+{
+    public function logApiCall($service, $method, $endpoint, $response, $duration)
+    {
+        Log::info('API Call', [
+            'service' => $service,
+            'method' => $method,
+            'endpoint' => $endpoint,
+            'status_code' => $response->status(),
+            'duration_ms' => $duration,
+            'tenant_id' => tenant('id') ?? null,
+        ]);
+        
+        // Track metrics
+        if ($response->failed()) {
+            Cache::increment("api_errors_{$service}_" . date('Y-m-d-H'));
+        }
+        
+        Cache::increment("api_calls_{$service}_" . date('Y-m-d-H'));
+    }
+}
+```
+
+## Conclusion
+
+Third-party API integrations are essential for modern web applications. Based on my experience at Vivansh Infotech, successful integrations require:
+
+1. **Proper Error Handling**: Always plan for API failures
+2. **Security**: Validate webhooks and secure API keys
+3. **Rate Limiting**: Respect API limits and implement backoff strategies
+4. **Monitoring**: Track API performance and errors
+5. **Testing**: Mock APIs for reliable testing
+6. **Documentation**: Keep integration details well-documented
+
+The APIs covered in this post - Stripe, DocuSign, Twilio, Zoom, Google Ads, Facebook Ads, and QuickBooks - represent some of the most commonly used integrations in modern web applications. Each brings unique challenges and benefits, but following these patterns will help you implement them successfully.
+
+Remember, the key to successful API integrations is not just getting them to work, but making them robust, secure, and maintainable for long-term success.
+
+---
+
+*This guide is based on real-world experience integrating these APIs in production applications. Always refer to the latest API documentation for the most current implementation details.*
