@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!project) {
     return {
-      title: 'Project Not Found | IMPRUTHVI - Pruthvisinh Rajput',
+      title: 'Project Not Found | Keyur Sanghani',
       description: 'The requested project could not be found.'
     }
   }
@@ -26,17 +26,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { metadata } = project
   const {
     title,
-    summary = 'Project by Pruthvisinh Rajput (IMPRUTHVI)',
+    summary = 'Project by Keyur Sanghani',
     image,
     publishedAt
   } = metadata
 
   return {
-    title: `${title} | IMPRUTHVI - Pruthvisinh Rajput Project`,
+    title: `${title} | Keyur Sanghani Project`,
     description: summary,
-    authors: [{ name: 'Pruthvisinh Rajput (IMPRUTHVI)' }],
+    authors: [{ name: 'Keyur Sanghani' }],
     openGraph: {
-      title: `${title} | IMPRUTHVI - Pruthvisinh Rajput Project`,
+      title: `${title} | Keyur Sanghani Project`,
       description: summary,
       type: 'article',
       publishedTime: publishedAt?.toString(),
@@ -44,14 +44,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ? [
             {
               url: image,
-              alt: `${title} by Pruthvisinh Rajput (IMPRUTHVI)`
+              alt: `${title} by Keyur Sanghani`
             }
           ]
         : []
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | IMPRUTHVI - Pruthvisinh Rajput Project`,
+      title: `${title} | Keyur Sanghani Project`,
       description: summary,
       images: image ? [image] : []
     },
@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: `/projects/${params.slug}`
     },
     keywords: [
-      'Pruthvisinh Rajput projects',
+      'Keyur Sanghani projects',
       'IMPRUTHVI projects',
       'web development project',
       'software development',

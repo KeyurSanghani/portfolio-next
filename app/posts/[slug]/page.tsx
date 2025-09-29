@@ -19,26 +19,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!post) {
     return {
-      title: 'Post Not Found | IMPRUTHVI - Pruthvisinh Rajput',
+      title: 'Post Not Found | Keyur Sanghani',
       description:
-        'The requested blog post by Pruthvisinh Rajput (IMPRUTHVI) could not be found.'
+        'The requested blog post by Keyur Sanghani could not be found.'
     }
   }
 
   const { metadata } = post
   const {
     title,
-    summary = 'Blog post by Pruthvisinh Rajput (IMPRUTHVI)',
+    summary = 'Blog post by Keyur Sanghani',
     image,
     publishedAt
   } = metadata
 
   return {
-    title: `${title} | IMPRUTHVI - Pruthvisinh Rajput`,
+    title: `${title} | Keyur Sanghani`,
     description: summary,
-    authors: [{ name: 'Pruthvisinh Rajput (IMPRUTHVI)' }],
+    authors: [{ name: 'Keyur Sanghani' }],
     openGraph: {
-      title: `${title} | IMPRUTHVI - Pruthvisinh Rajput`,
+      title: `${title} | Keyur Sanghani`,
       description: summary,
       type: 'article',
       publishedTime: publishedAt?.toString(),
@@ -46,14 +46,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ? [
             {
               url: image,
-              alt: `${title} by Pruthvisinh Rajput (IMPRUTHVI)`
+              alt: `${title} by Keyur Sanghani`
             }
           ]
         : []
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | IMPRUTHVI - Pruthvisinh Rajput`,
+      title: `${title} | Keyur Sanghani`,
       description: summary,
       images: image ? [image] : []
     },
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: `/posts/${params.slug}`
     },
     keywords: [
-      'Pruthvisinh Rajput blog',
+      'Keyur Sanghani blog',
       'IMPRUTHVI blog post',
       'developer insights',
       'software development',

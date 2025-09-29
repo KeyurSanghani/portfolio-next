@@ -2,7 +2,7 @@
 title: 'Automating Your Laravel Server on AWS with CloudFormation'
 summary: 'Stop manually configuring servers for your Laravel projects. This guide teaches you how to use AWS CloudFormation to automatically provision a secure, production-ready VPS on AWS.'
 image: /images/posts/aws-cloudformation-vps.png
-author: 'Pruthvisinh Rajput'
+author: 'Keyur Sanghani'
 publishedAt: '2025-08-17'
 ---
 
