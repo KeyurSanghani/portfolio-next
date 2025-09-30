@@ -198,24 +198,11 @@ The portfolio is fully responsive and optimized for:
 - XML sitemap generation
 - Robots.txt configuration
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/new-feature`
-3. Commit your changes: `git commit -am 'Add new feature'`
-4. Push to the branch: `git push origin feature/new-feature`
-5. Submit a pull request
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
 ## 📞 Contact
 
 - **Email**: keyur.sanghani10@gmail.com
 - **LinkedIn**: [linkedin.com/in/keyur-sanghani-044bb1215](https://linkedin.com/in/keyur-sanghani-044bb1215)
 - **GitHub**: [github.com/KeyurSanghani](https://github.com/KeyurSanghani)
-- **Portfolio**: [keyur2003.github.io](https://keyur2003.github.io/)
 
 ---
 
