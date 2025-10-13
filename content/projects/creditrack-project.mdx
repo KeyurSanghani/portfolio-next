@@ -1,0 +1,209 @@
+---
+title: "CrediTrack - Multi-Tenant Financial Management Platform"
+summary: "Multi-tenant SaaS fintech platform built with Laravel 12, Vue.js, and Inertia.js for comprehensive financial management with customer tracking, product inventory, document generation, and role-based access control."
+image: "/images/projects/creditrack-platform.png"
+author: "Keyur Sanghani"
+publishedAt: "2024-08-01"
+---
+
+## CrediTrack - Multi-Tenant Financial Management Platform
+
+A modern multi-tenant SaaS fintech platform built with Laravel 12, Vue.js 3, and Inertia.js, designed to help businesses manage customers, products, invoices, payments, and financial tracking with tenant isolation and role-based access control.
+
+### Project Overview
+
+CrediTrack is a multi-tenant financial management system that enables businesses to operate independent instances within a shared application infrastructure. Built with Laravel 12 backend and Vue.js 3 frontend using Inertia.js for seamless SPA experience, the platform provides comprehensive tools for customer management, product inventory, invoice generation, payment processing, and financial analytics.
+
+The system uses a central database architecture with tenant isolation through company_id, ensuring secure data segregation while maintaining optimal performance and simplified infrastructure management.
+
+### Core Features
+
+#### Multi-Tenancy Architecture
+- Central database with tenant isolation via company_id
+- Automatic tenant context switching based on authenticated user
+- Shared application infrastructure with isolated tenant data
+- Company-specific data scoping using global scopes
+- Secure cross-tenant data protection
+
+#### Customer Management
+- Comprehensive customer profiles with contact information
+- Customer categorization and status tracking
+- Transaction history and account management
+- Document attachments for KYC and agreements
+- Customer activity tracking and audit trails
+
+#### Product & Inventory Management
+- Product catalog with categories and subcategories
+- Dynamic product attributes (size, color, type)
+- Product variants with individual item tracking
+- Stock management and inventory control
+- Product status management (active/inactive)
+- Image management for products
+
+#### Document Management
+- Multiple document type support (invoice, quotation, receipt)
+- Customizable document templates
+- Document status tracking
+- Automated document generation
+- PDF export capabilities
+
+#### User & Access Management
+- Role-based access control (RBAC) with Spatie Permission
+- Multiple roles: Super Admin, Company Admin, Collection Agent
+- Granular permission system
+- User activity tracking and audit logs
+- Company-specific user management
+
+#### Dashboard & Analytics
+- Real-time business metrics and KPIs
+- Customer overview and statistics
+- Product inventory tracking
+- Financial data visualization (planned)
+- Interactive charts and graphs (planned)
+
+### Technical Architecture
+
+#### Backend Development
+- **Framework**: PHP 8.4 with Laravel 12
+- **Multi-Tenancy**: Stancl Tenancy with central database approach
+- **Database**: PostgreSQL with Eloquent ORM
+- **Authentication**: Laravel Sanctum for API token authentication
+- **Authorization**: Spatie Laravel Permission for RBAC
+- **Image Processing**: Intervention Image for photo manipulation
+
+#### Frontend Development
+- **Framework**: Vue.js 3 with Composition API and TypeScript
+- **Routing**: Inertia.js 2 for hybrid SSR/SPA architecture
+- **UI Components**: Reka UI for accessible component library
+- **Styling**: Tailwind CSS 4 for modern, responsive design
+- **Icons**: Lucide Vue for consistent iconography
+- **Build Tool**: Vite with hot module replacement (HMR)
+- **Type Safety**: TypeScript throughout the frontend
+
+#### Key Technical Features
+- Server-side rendering capabilities with Inertia.js
+- Automatic route generation with Ziggy for type-safe routing
+- Repository pattern for data access abstraction
+- Observer pattern for automatic field tracking (created_by, updated_by)
+- Policy-based authorization for secure access control
+- Form request validation for centralized validation logic
+- Soft deletes for data recovery capabilities
+- Database transactions for data integrity
+- Queue system for background job processing
+
+### Development Highlights
+
+#### Multi-Tenant Implementation
+- **Central Database**: Single database with company_id scoping
+- **Tenant Scoping**: Global scopes applied to all tenant-aware models
+- **Context Switching**: Middleware-based tenant initialization
+- **Data Isolation**: BelongsToCompany trait for automatic scoping
+- **Performance**: Optimized queries with proper indexing
+
+#### Database Architecture
+- **9 Core Models**: User, Company, Customer, Category, Product, ProductItem, ProductAttribute, DocumentType, Role
+- **Complex Relationships**: HasMany, BelongsTo, MorphMany
+- **Soft Deletes**: Data preservation across all models
+- **Audit Fields**: created_by, updated_by tracking via observers
+- **Foreign Keys**: Referential integrity enforcement
+
+#### Security Implementation
+- **Multi-Tenant Security**: Company-scoped queries via global scopes
+- **Authentication**: Token-based API authentication with Sanctum
+- **Authorization**: Policy-based access control for all resources
+- **RBAC**: Role and permission system with Spatie
+- **Data Protection**: SQL injection prevention, XSS protection, CSRF tokens
+- **Audit Trails**: Comprehensive activity logging
+
+#### Vue.js Components
+- Dynamic form components with validation
+- Reusable data table with sorting and filtering
+- Modal system for dialogs
+- Toast notifications for user feedback
+- File upload with preview
+- Search with debouncing
+- Date picker components
+- Status badge system
+
+### Technologies & Packages Used
+
+#### Core Framework
+- PHP 8.4.11
+- Laravel Framework 12
+- PostgreSQL Database
+
+#### Multi-Tenancy & Authentication
+- Stancl Tenancy for Laravel 3 (central database mode)
+- Laravel Sanctum 4 (API authentication)
+- Spatie Laravel Permission 6 (RBAC)
+
+#### Frontend Stack
+- Vue.js 3.5 with Composition API
+- Inertia.js 2.1 (Hybrid SSR/SPA)
+- TypeScript 5.2 (Type safety)
+- Tailwind CSS 4.1 (Styling)
+- Reka UI 2.5 (Component library)
+- Lucide Vue (Icons)
+
+#### Development Tools
+- Vite 7 (Build tool with HMR)
+- Laravel Pint (PHP code formatter)
+- ESLint (JavaScript/TypeScript linter)
+- Prettier (Code formatter)
+- Laravel Boost (Development acceleration)
+- Laravel Sail (Docker development)
+
+#### Utilities
+- Ziggy 2.4 (Route generation for JavaScript)
+- Intervention Image 3.11 (Image processing)
+- Vinkla Hashids 13 (ID obfuscation)
+- Axios (HTTP client)
+- VueUse (Vue composition utilities)
+
+### Technical Skills Demonstrated
+
+- **Backend Development**: PHP 8.4+, Laravel 12, RESTful API design
+- **Frontend Development**: Vue.js 3, Composition API, TypeScript
+- **SPA Architecture**: Inertia.js hybrid SSR/SPA approach
+- **Multi-Tenancy**: Central database with tenant scoping
+- **Database Design**: PostgreSQL, Eloquent relationships, query optimization
+- **Authentication & Authorization**: Sanctum, Spatie Permission, policies
+- **UI/UX Development**: Tailwind CSS 4, Reka UI, responsive design
+- **Testing**: Pest 4 for modern PHP testing
+- **Code Quality**: Laravel Pint, ESLint, code standards
+- **Version Control**: Git workflow and collaboration
+- **Containerization**: Docker with Laravel Sail
+
+### Development Best Practices
+
+- **SOLID Principles**: Clean, maintainable architecture
+- **Repository Pattern**: Data access abstraction
+- **Observer Pattern**: Automatic model event handling
+- **Policy Authorization**: Centralized access control
+- **Form Requests**: Validation and authorization
+- **Type Safety**: TypeScript and PHP type hints
+- **Code Standards**: Consistent formatting with Pint and Prettier
+- **Database Transactions**: Data integrity in operations
+- **Soft Deletes**: Data preservation and recovery
+
+### Project Statistics
+
+- **9 Core Models**: Well-structured domain entities
+- **13 Database Tables**: Comprehensive data modeling
+- **8+ Vue Pages**: Complete user interface
+- **20+ Vue Components**: Reusable UI components
+- **Multiple Policies**: Fine-grained authorization
+- **3 System Roles**: Super Admin, Company Admin, Collection Agent
+- **Comprehensive Testing**: Feature and unit test coverage
+
+### Future Enhancements
+
+- Invoice generation and management system
+- EMI (installment) tracking and payment schedules
+- Stripe payment gateway integration
+- Expense tracking and categorization
+- Advanced financial reporting with charts
+- Cash flow analysis and forecasting
+- Automated payment reminders
+
+---

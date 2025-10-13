@@ -1,59 +1,275 @@
 ---
-title: "HR Management System"
-summary: "A comprehensive HR management system with user-friendly interface built using Bootstrap, PHP backend, and MySQL database for efficient HR task management."
-image: "/images/projects/hr-management-system.png"
+title: "WorkPulse - Employee Management System"
+summary: "Comprehensive workforce management platform built with Laravel 12 and Filament 4 for project tracking, leave management, task monitoring, and team collaboration with role-based access control and real-time reporting."
+image: "/images/projects/workpulse-platform.png"
 author: "Keyur Sanghani"
-publishedAt: "2022-10-01"
+publishedAt: "2025-10-04"
 ---
 
-## HR Management System
+## WorkPulse - Employee Management System 
 
-A comprehensive Human Resources Management System designed to streamline HR operations and improve efficiency in managing employee data, processes, and workflows.
+A modern, full-featured Employee Management System built with cutting-edge Laravel technologies, designed to streamline workforce management, project tracking, leave administration, and team collaboration within organizations.
 
 ### Project Overview
 
-This HR Management System was developed to address the complex needs of human resource departments, providing a centralized platform for managing employee information, tracking performance, and automating routine HR tasks.
+WorkPulse is an enterprise-grade workforce management platform that provides organizations with powerful tools to manage employees, track projects, monitor task progress, handle leave applications, and facilitate team collaboration. Built with Laravel 12, Filament 4, and Livewire 3, the system offers a server-driven UI approach with real-time updates and an intuitive admin panel.
 
-### Key Features
+This system addresses critical organizational needs including resource allocation, project timeline management, leave tracking, employee performance monitoring, and hierarchical reporting structures.
 
-- **Employee Management**: Complete employee profile management with personal and professional information
-- **User-Friendly Interface**: Responsive design built with Bootstrap for optimal user experience across devices
-- **Data Management**: Efficient database operations using MySQL for reliable data storage and retrieval
-- **Dashboard Analytics**: Comprehensive reporting and analytics for HR decision-making
-- **Role-based Access**: Secure access control based on user roles and permissions
+### Core Features
 
-### Technical Implementation
+#### Employee Management
+- Comprehensive employee profiles with personal and professional information
+- Designation and role management system
+- Hierarchical reporting structure (manager-employee relationships)
+- User authentication and role-based access control (RBAC)
+- Employee status tracking (active/inactive)
+- Contact information and document management
 
-- **Frontend**: Bootstrap framework for responsive and modern UI/UX
-- **Backend**: PHP with object-oriented programming principles
-- **Database**: MySQL for robust data management
-- **Architecture**: MVC pattern for maintainable and scalable code structure
+#### Project Management
+- Complete project lifecycle tracking (planning to completion)
+- Project categorization by type and status
+- Budget and timeline management (start date, end date)
+- Project member assignment with role designation
+- Multi-role support (Project Managers, Team Leaders, Developers)
+- Project-wise resource allocation and tracking
+- Soft delete functionality for data integrity
+
+#### Task Management System
+- Comprehensive task board with drag-and-drop functionality
+- Task status workflow (Backlog → To Do → In Progress → In Review → Closed)
+- Task assignment and tracking per project
+- Position-based task ordering
+- Daily task updates and progress monitoring
+- Task update history and audit trails
+- Real-time task status visualization
+
+#### Leave Management
+- Digital leave application system
+- Multiple leave type support (sick leave, casual leave, etc.)
+- Full-day and half-day leave options
+- Leave approval workflow with hierarchical authorization
+- Leave application status tracking (pending, approved, rejected)
+- Day-wise leave management and approval
+- Leave balance calculation and reporting
+- Leave history and audit trail
+- Manager-based leave review system
+
+#### Event & Holiday Management
+- Organization-wide event calendar
+- Personal and organizational event categorization
+- Holiday calendar management
+- Event type classification (birthday, work anniversary, organization events)
+- All-day and time-specific event support
+- Social media banner generation (LinkedIn, WhatsApp, Instagram)
+- Calendar integration with visual event display
+- Upcoming events dashboard widget
+
+#### Dashboard & Reporting
+- Real-time dashboard with key metrics
+- Daily task update widgets
+- Missing task updates alerts
+- Upcoming events preview
+- Leave application overview statistics
+- Custom report generation and export
+- Data visualization for management insights
+
+### Technical Architecture
+
+#### Backend Development
+- **Framework**: PHP 8.2+ with Laravel 12 for robust, scalable backend
+- **Admin Panel**: Filament 4 for server-driven UI and rapid development
+- **Real-time UI**: Livewire 3 for dynamic, reactive components
+- **Database**: PgSQL with Eloquent ORM for elegant data management
+- **Security**: Laravel Shield for comprehensive role-based permissions
+
+#### Frontend Technology
+- **UI Framework**: Tailwind CSS 4 for modern, responsive design
+- **Build Tool**: Vite for fast frontend asset compilation
+- **Icons**: Heroicons for consistent iconography
+- **Calendar**: Guava Calendar for event visualization
+- **Components**: Custom Filament components for specialized functionality
+
+#### Key Technical Features
+- Role-based access control (RBAC) with Filament Shield
+- Soft delete implementation for data recovery
+- Audit trail tracking (created_by, last_updated_by)
+- Observer pattern for automatic field updates
+- Policy-based authorization for secure access
+- Repository pattern for data access abstraction
+- Advanced Eloquent relationships and query optimization
+- Database migrations for version-controlled schema changes
+- Factory and seeder pattern for testing and development data
 
 ### Development Highlights
 
-- Implemented secure user authentication and authorization
-- Designed normalized database schema for optimal performance
-- Created intuitive dashboards for different user roles
-- Developed comprehensive reporting modules
-- Ensured responsive design for mobile and desktop compatibility
+#### Database Architecture
+- **20+ Database Tables**: Comprehensive relational database design
+- **Complex Relationships**: Eloquent relationships including HasMany, BelongsTo, HasManyThrough
+- **Migration System**: Version-controlled database schema with Laravel migrations
+- **Soft Deletes**: Data preservation with recovery capabilities
+- **Polymorphic Relationships**: Flexible data modeling
+
+#### Security Implementation
+- **Authentication**: Laravel's built-in authentication system
+- **Authorization**: Policy-based access control for all resources
+- **RBAC**: Multi-role support (Super Admin, HR, Project Manager, Team Leader, Developer)
+- **Permission System**: Granular permissions using Spatie Laravel Permission
+- **Filament Shield**: Integrated role and permission management UI
+- **Audit Trails**: Automatic tracking of record creation and modifications
+
+#### Advanced Features
+- **Kanban Board**: Drag-and-drop task board with FlowForge integration
+- **Export Functionality**: PDF and Excel report generation with DomPDF
+- **Data Import/Export**: Bulk data operations with failed row handling
+- **Notification System**: Real-time notifications for important events
+- **Queue System**: Background job processing for heavy operations
+- **Observer Pattern**: Automatic field population on model events
+- **Form Requests**: Centralized validation and authorization
 
 ### Business Impact
 
-The system significantly improved HR workflow efficiency by:
-- Reducing manual paperwork and data entry
-- Centralizing employee information management
-- Automating routine HR processes
-- Providing real-time insights through reporting features
+WorkPulse delivers significant organizational value:
 
-### Technologies Used
+- **Improved Productivity**: Real-time task tracking and progress monitoring
+- **Efficient Resource Management**: Optimal allocation of team members across projects
+- **Streamlined Leave Management**: Digital workflow reducing administrative overhead
+- **Enhanced Transparency**: Clear visibility into project status and employee activities
+- **Data-Driven Decisions**: Comprehensive reporting for management insights
+- **Better Collaboration**: Integrated communication and task coordination
+- **Compliance Tracking**: Leave policy enforcement and audit trails
+- **Time Savings**: Automated workflows and reduced manual processing
 
-- PHP
-- MySQL
-- Bootstrap
-- HTML5/CSS3
-- JavaScript
-- jQuery
+### Technical Skills Demonstrated
 
-### Links
+- **Backend Development**: PHP 8.2+, Laravel 12
+- **Frontend Development**: Livewire 3, Alpine.js, Tailwind CSS 4
+- **Admin Panel**: Filament 4 (Resources, Forms, Tables, Actions, Schemas)
+- **Database Design**: PgSQL, Complex Eloquent relationships
+- **Authentication & Authorization**: Laravel Policies, RBAC, Filament Shield
+- **Package Integration**: Guava Calendar, FlowForge, DomPDF, Laravel Boost
+- **Testing**: Pest 4 for modern PHP testing
+- **Code Quality**: Laravel Pint for consistent code formatting
+- **Version Control**: Git for source code management
+- **Containerization**: Docker support with Laravel Sail
+- **API Design**: RESTful API principles and best practices
 
-- [GitHub Repository](https://github.com/Keyur2003/HR-Managment-system)
+### System Architecture Components
+
+#### Models & Relationships
+- **User**: Employee profiles with designation and reporting hierarchy
+- **Designation**: Job titles and organizational positions
+- **Project**: Project information with budget and timeline tracking
+- **ProjectMember**: Many-to-many relationship for project assignments
+- **ProjectTask**: Task management with status workflow
+- **ProjectTaskUpdate**: Daily progress updates and time tracking
+- **LeaveApplication**: Leave request with approval workflow
+- **LeaveApplicationDay**: Day-wise leave tracking and approval
+- **LeaveType**: Configurable leave categories
+- **Event**: Calendar events with social media integration
+- **Holiday**: Organization-wide holiday management
+
+#### Filament Resources
+- User Management Resource
+- Designation Resource
+- Project Resource with member management
+- Project Task Resource with kanban board
+- Project Task Update Resource with daily widgets
+- Leave Application Resource with approval workflow
+- Leave Type Resource
+- Event Resource with calendar view
+- Holiday Resource
+- Role & Permission Management (Shield)
+
+#### Custom Pages
+- **Dashboard**: Real-time metrics and widgets
+- **Task Board**: Kanban-style project task management
+- **Event Calendar**: Interactive calendar view for events
+- **Leave Report**: Comprehensive leave analytics and export
+
+#### Widgets & Analytics
+- Daily Task Update Widget
+- Upcoming Events Widget
+- Missing Task Updates Alert Widget
+- Leave Application Overview Statistics
+
+### Development Best Practices
+
+This project demonstrates adherence to:
+- **SOLID Principles**: Clean, maintainable code architecture
+- **DRY Principle**: Code reusability through components and traits
+- **Repository Pattern**: Separation of data access logic
+- **Observer Pattern**: Automatic model event handling
+- **Policy Authorization**: Centralized access control logic
+- **Form Requests**: Request validation and authorization
+- **Database Transactions**: Data integrity in complex operations
+- **Type Hinting**: PHP 8+ features for code reliability
+- **Code Documentation**: PHPDoc blocks for better code understanding
+- **Testing Approach**: Pest 4 for comprehensive testing
+- **Code Standards**: Laravel Pint for consistent formatting
+
+### Learning Outcomes
+
+This project provided comprehensive experience in:
+- Building enterprise-level Laravel applications
+- Implementing complex authorization systems with RBAC
+- Working with Filament 4's server-driven UI approach
+- Managing complex database relationships and queries
+- Creating custom Livewire components for reactive UIs
+- Implementing workflow systems (task status, leave approval)
+- Building real-time dashboards and analytics
+- Package integration and customization
+- Performance optimization for large datasets
+- Modern PHP development practices
+
+### Technologies & Packages Used
+
+#### Core Framework
+- PHP 8.2+
+- Laravel Framework 12
+- Laravel Tinker for interactive debugging
+
+#### Admin Panel & UI
+- Filament 4 (Admin Panel Framework)
+- Filament Shield 4 (Role & Permission Management)
+- Livewire 3 (Server-Driven Components)
+- Alpine.js (Frontend Interactivity)
+
+#### Frontend
+- Tailwind CSS 4 (Utility-First CSS)
+- Vite (Frontend Build Tool)
+- Axios (HTTP Client)
+
+#### Specialized Packages
+- Guava Calendar 2 (Event Calendar Integration)
+- Relaticle FlowForge 2 (Kanban Board)
+- Ysfkaya Filament Phone Input 4 (Phone Number Input)
+- Barryvdh Laravel DomPDF 3 (PDF Generation)
+
+#### Development Tools
+- Pest 4 (Modern PHP Testing)
+- Laravel Pint (Code Formatter)
+- Laravel Sail (Docker Development Environment)
+- Laravel Boost (Development Acceleration)
+- Laravel Pail (Log Viewing)
+
+#### Database & Queue
+- PgSQL (Primary Database)
+- Redis (Cache & Queue Driver)
+- Laravel Queue System
+- Laravel Notifications
+
+### Project Statistics
+
+- **20+ Database Tables**: Comprehensive data modeling
+- **11 Core Models**: Well-structured domain entities
+- **10+ Filament Resources**: Full CRUD operations with custom logic
+- **8+ Observers**: Automatic field tracking
+- **Multiple Policies**: Fine-grained authorization
+- **4 Custom Pages**: Specialized functionality beyond resources
+- **3+ Widgets**: Dashboard analytics components
+- **Custom Livewire Components**: Enhanced interactivity
+- **Repository Layer**: Clean data access patterns
+
+---
+
